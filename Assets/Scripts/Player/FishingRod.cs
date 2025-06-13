@@ -7,13 +7,14 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private FishList _allFishList;
     [SerializeField] private Inventory _inventory;
     [SerializeField] private Button _clickButton;
+    [SerializeField] private UpgradeData _upgradeData;
 
     public event Action<Fish> FishSelected;
     public event Action<int, int> Click;
 
     private Fish _currentFish;
     private bool _fishing = false;
-    private int _multiplierClicks = 1;
+    private int _clicksAmount = 1;
     private int _countClicks;
 
     private void OnEnable()
@@ -28,13 +29,15 @@ public class FishingRod : MonoBehaviour
 
     public void OnClick()
     {
-        int oneClick = 1;
-        int clickCount = oneClick * _multiplierClicks;
+        if (TryChance(_upgradeData.FishingBonus))
+            _clicksAmount = 2;
+        else
+            _clicksAmount = 1;
 
         if (_fishing == false)
             StartFishing();
 
-        _countClicks += clickCount;
+        _countClicks += _clicksAmount;
         Click?.Invoke(_countClicks, _currentFish.AmountOffort);
 
         TryCatchFish();
@@ -47,10 +50,26 @@ public class FishingRod : MonoBehaviour
         _fishing = true;
     }
 
+    private bool TryChance(int needChance)
+    {
+        int maxChance = 100;
+        int minChance = 0;
+        float chance = UnityEngine.Random.Range(minChance, maxChance);
+
+        if (chance <= needChance)
+            return true;
+
+        return false;
+
+    }
+
     private void TryCatchFish()
     {
         if (_countClicks >= _currentFish.AmountOffort)
         {
+            if (TryChance(_upgradeData.CatchingBonus))
+                _inventory.AddFish(_currentFish);
+
             _inventory.AddFish(_currentFish);
             _fishing = false;
             _countClicks = 0;
