@@ -3,9 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public abstract class View : MonoBehaviour, IView
+public abstract class View<T> : MonoBehaviour, IView where T : View<T>
 {
     [SerializeField] private GameObject _frame;
+
+    public event Action<T> Click;
 
     private Button _button;
 
@@ -24,7 +26,10 @@ public abstract class View : MonoBehaviour, IView
         _button.onClick.RemoveListener(Clicked);
     }
 
-    protected abstract void Clicked();
+    private void Clicked()
+    {
+        Click?.Invoke((T)this);
+    }
 
     public void ChangeActiveFrame(bool value)
     {

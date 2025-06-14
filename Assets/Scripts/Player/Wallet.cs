@@ -10,11 +10,7 @@ public class Wallet : MonoBehaviour
     public event Action<int> ExpChanged;
 
     public int Exp => _exp;
-
-    private void Awake()
-    {
-        AddExp(444); //
-    }
+    public int Money => _money;
 
     public void AddMoney(int amount)
     {
@@ -41,5 +37,14 @@ public class Wallet : MonoBehaviour
 
         _exp -= amount;
         ExpChanged?.Invoke(_exp);
+    }
+
+    public void RemoveMoney(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        _money -= amount;
+        MoneyChanged?.Invoke(_money);
     }
 }

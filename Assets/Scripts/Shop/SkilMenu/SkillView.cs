@@ -1,13 +1,11 @@
 using System;
 using UnityEngine;
 
-public class SkillView : View
+public class SkillView : View<SkillView>
 {
     [SerializeField] private Skils _skill;
     [SerializeField] private int _bonus;
     [SerializeField] private int _cost;
-
-    public event Action<SkillView> Click;
 
     public Skils Skill => _skill;
     public int Bonus => _bonus;
@@ -20,11 +18,6 @@ public class SkillView : View
     public void Buy()
     {
         _isBuying = true;
-    }
-
-    protected override void Clicked()
-    {
-        Click?.Invoke(this);
     }
 }
 

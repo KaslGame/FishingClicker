@@ -4,13 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class QuestView : View
+public class QuestView : View<QuestView>
 {
     [SerializeField] private Sprite _icon;
     [SerializeField] private Fish _fish;
     [SerializeField] private int _maxFishAmount;
 
-    public event Action<QuestView> Click;
     public event Action<int> QuestFinish;
 
     public Sprite Icon => _icon;
@@ -22,11 +21,6 @@ public class QuestView : View
     private List<Fish> _needFishList = new List<Fish>();
 
     private int _needFishAmount = 5;
-
-    protected override void Clicked()
-    {
-        Click?.Invoke(this);
-    }
 
     public void AddFish(Fish fish)
     {

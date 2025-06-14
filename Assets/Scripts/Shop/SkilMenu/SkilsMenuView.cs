@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SkilsMenuView : MonoBehaviour
+public class SkilsMenuView : MenuView<SkillView>
 {
     const string Buy = "Купить";
     const string Sell = "Продано";
@@ -11,22 +10,12 @@ public class SkilsMenuView : MonoBehaviour
     [SerializeField] private TMP_Text _bonus;
     [SerializeField] private TMP_Text _buyButton;
 
-    private List<SkillView> _skillViews = new List<SkillView>();
-
-    private void Awake()
+    protected override void OnClick(SkillView skillView)
     {
-        _skillViews.AddRange(gameObject.GetComponentsInChildren<SkillView>());
-
-        foreach (SkillView skillView in _skillViews)
-            skillView.Click += OnClick;
-    }
-
-    private void OnClick(SkillView skillView)
-    {
-        ActivateFrame(skillView);
+        base.OnClick(skillView);
         ChangeBuyButtonText(skillView.IsBuying);
         _cost.text = $"Цена: {skillView.Cost} EXP";
-        
+
         switch (skillView.Skill)
         {
             case Skils.Selling:
@@ -41,14 +30,6 @@ public class SkilsMenuView : MonoBehaviour
                 _bonus.text = $"Шанс: +{skillView.Bonus}% двойному вылову";
                 break;
         }
-    }
-
-    private void ActivateFrame(SkillView newSkillView)
-    {
-        foreach (SkillView skillView in _skillViews)
-            skillView.ChangeActiveFrame(false);
-
-        newSkillView.ChangeActiveFrame(true);
     }
 
     public void ChangeBuyButtonText(bool isBuying)

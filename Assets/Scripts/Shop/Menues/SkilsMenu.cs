@@ -7,7 +7,6 @@ public class SkilsMenu : Menu
     [SerializeField] private SkilsMenuView _buttons;
     [SerializeField] private UpgradeData _upgradeData;
     [SerializeField] private Wallet _wallet;
-    [SerializeField] private Button _buyButton;
 
     private List<SkillView> _skillViews = new List<SkillView>();
 
@@ -21,27 +20,17 @@ public class SkilsMenu : Menu
             skillView.Click += OnClick;
     }
 
-    private void OnEnable()
-    {
-        _buyButton.onClick.AddListener(MakeAction);
-    }
-
-    private void OnDisable()
-    {
-        _buyButton.onClick.RemoveListener(MakeAction);
-    }
-
     private void OnClick(SkillView skillView)
     {
         _currentSkilView = skillView;
 
         if (skillView.IsBuying == true)
-            _buyButton.interactable = false;
+            ButtonMenu.interactable = false;
         else
-            _buyButton.interactable = true;
+            ButtonMenu.interactable = true;
     }
 
-    private void MakeAction()
+    protected override void MakeAction()
     {
         if (_currentSkilView == null)
             return;
@@ -74,7 +63,7 @@ public class SkilsMenu : Menu
 
     private void OffButton()
     {
-        _buyButton.interactable = false;
+        ButtonMenu.interactable = false;
         _buttons.ChangeBuyButtonText(_currentSkilView.IsBuying);
     }
 }

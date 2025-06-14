@@ -5,8 +5,14 @@ public class FishList : MonoBehaviour
 {
     [SerializeField] private List<Fish> _fishList;
 
+    public int Count => _fishList.Count;
+
     public Fish GetRandomFish()
     {
         return _fishList[Random.Range(0, _fishList.Count)];
+    }
+    public void Add(Fish newFish)
+    {
+        _fishList.Add(newFish);
     }
 }

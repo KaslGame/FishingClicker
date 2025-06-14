@@ -7,22 +7,19 @@ public class SellerMenu : Menu
     [SerializeField] private Inventory _inventory;
     [SerializeField] private Wallet _wallet;
     [SerializeField] private FishSellerView _fishSellerView;
-    [SerializeField] private Button _sellAllButton;
     [SerializeField] private UpgradeData _upgradeData;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         _fishSellerView.ReDraw(_inventory.GetFishes());
         _fishSellerView.Selling += OnSelling;
-
-        _sellAllButton.onClick.AddListener(SellAllFish);
     }
 
     private void OnDisable()
     {
         _fishSellerView.Selling -= OnSelling;
-
-        _sellAllButton.onClick.RemoveListener(SellAllFish);
     }
 
     public void OnSelling(Fish fish)
@@ -32,7 +29,7 @@ public class SellerMenu : Menu
         _fishSellerView.ReDraw(_inventory.GetFishes());
     }
 
-    private void SellAllFish()
+    protected override void MakeAction()
     {
         Dictionary<Fish, int> fishes = _inventory.GetFishes();
         List<Fish> fishList = new List<Fish>();
