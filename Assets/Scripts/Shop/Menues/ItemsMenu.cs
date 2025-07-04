@@ -41,6 +41,7 @@ public class ItemsMenu : Menu
         _currentView.Buy();
         CheckIsBuying(_currentView.CheckIsBuying());
         _buttons.RedrawInfo(_currentView);
+        BuySound.PlayBuySound();
     }
 
     private void CheckIsBuying(bool isBuying)

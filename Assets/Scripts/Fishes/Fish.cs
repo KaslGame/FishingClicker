@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Fish", menuName = "Create fish/ New Fish")]

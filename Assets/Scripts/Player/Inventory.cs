@@ -1,9 +1,14 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
     private Dictionary<Fish, int> _fishes = new();
+
+    public event Action<Dictionary<Fish, int>> FishAmountChanged;
+    public event Action<Sprite> FishAdded;
 
     public void AddFish(Fish fish)
     {
@@ -13,6 +18,9 @@ public class Inventory : MonoBehaviour
             _fishes.Add(fish, oneFish);
         else
             _fishes[fish] += oneFish;
+
+        FishAmountChanged?.Invoke(new Dictionary<Fish, int>(_fishes));
+        FishAdded?.Invoke(fish.Icon);
     }
 
     public void RemoveFish(Fish fish)
@@ -26,6 +34,8 @@ public class Inventory : MonoBehaviour
             else
                 _fishes.Remove(fish);
         }
+
+        FishAmountChanged?.Invoke(new Dictionary<Fish, int>(_fishes));
     }
 
     public Dictionary<Fish, int> GetFishes()

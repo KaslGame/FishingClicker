@@ -6,6 +6,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class QuestView : View<QuestView>
 {
+    private const string Key = "quests";
+
     [SerializeField] private Sprite _icon;
     [SerializeField] private Fish _fish;
     [SerializeField] private int _maxFishAmount;
@@ -22,11 +24,28 @@ public class QuestView : View<QuestView>
 
     private int _needFishAmount = 5;
 
-    public void AddFish(Fish fish)
+    private IStorageService _storageService;
+
+    private void Start()
     {
-        _needFishList.Add(fish);
+        int minFishAmount = 5;
+
+        _storageService = new JsonToFileStorageServiceAsync();
+
+        if (_storageService.Exists(Key + _fish.ID))
+            LoadData();
+        else
+            _needFishAmount = minFishAmount;
+    }
+
+    public void AddFish(Fish fish, int amount = 1)
+    {
+        for (int i = 0; i < amount; i++)
+            _needFishList.Add(fish);
 
         CheckList();
+
+        SaveData();
     }
 
     private void CheckList()
@@ -40,5 +59,28 @@ public class QuestView : View<QuestView>
             QuestFinish?.Invoke(_fish.AmountOffort / coeficent);
             _needFishAmount = UnityEngine.Random.Range(minFishAmount, _maxFishAmount);
         }
+    }
+
+    private void SaveData()
+    {
+        var data = new QuestData
+        {
+            FishAmount = _needFishList.Count,
+            NeedFishAmount = _needFishAmount
+        };
+
+        _storageService.Save(Key + _fish.ID, data);
+    }
+
+    private void LoadData()
+    {
+        _storageService.Load<QuestData>(Key + _fish.ID, data =>
+        {
+            _needFishAmount = data.NeedFishAmount;
+            _needFishList = new List<Fish>();
+
+            for (int i = 0; i < data.FishAmount; i++)
+                _needFishList.Add(_fish); 
+        });
     }
 }

@@ -48,7 +48,7 @@ public class SellerMenu : Menu
 
         for (int i = fishList.Count - 1; i >= 0; i--)
         {
-            fishes.Remove(fishList[i]);
+            _inventory.RemoveFish(fishList[i]);
             fishList.Remove(fishList[i]);
         }
 

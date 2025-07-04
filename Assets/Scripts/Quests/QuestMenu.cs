@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class QuestMenu : MonoBehaviour
 {
+    private const string key = "quest";
+
     [SerializeField] private GameObject _buttons;
     [SerializeField] private Inventory _inventory;
     [SerializeField] private Wallet _wallet;
@@ -39,12 +41,13 @@ public class QuestMenu : MonoBehaviour
     private void OnClick(QuestView questView)
     {
         _currentQuestView = questView;
+        _button.interactable = true;
         UpdateText();
     }
 
     private void OnQuestFinish(int amount)
     {
-        _wallet.AddExp(amount);
+        _wallet.AddExperience(amount);
     }
 
     private void MakeAction()

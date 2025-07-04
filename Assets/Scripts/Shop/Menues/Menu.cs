@@ -5,6 +5,7 @@ public abstract class Menu : MonoBehaviour
 {
     [SerializeField] protected Button ButtonMenu;
     [SerializeField] private string _nameMenu;
+    [SerializeField] protected BuySound BuySound;
 
     public string NameMenu => _nameMenu;
 

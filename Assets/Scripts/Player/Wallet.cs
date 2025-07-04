@@ -4,12 +4,12 @@ using UnityEngine;
 public class Wallet : MonoBehaviour
 {
     private int _money;
-    private int _exp;
+    private int _experience;
 
     public event Action<int> MoneyChanged;
-    public event Action<int> ExpChanged;
+    public event Action<int> ExperienceChanged;
 
-    public int Exp => _exp;
+    public int Exp => _experience;
     public int Money => _money;
 
     public void AddMoney(int amount)
@@ -21,13 +21,13 @@ public class Wallet : MonoBehaviour
         MoneyChanged?.Invoke(_money);
     }
 
-    public void AddExp(int amount)
+    public void AddExperience(int amount)
     {
         if (amount <= 0)
             return;
 
-        _exp += amount;
-        ExpChanged?.Invoke(_exp);
+        _experience += amount;
+        ExperienceChanged?.Invoke(_experience);
     }
 
     public void RemoveExp(int amount)
@@ -35,8 +35,8 @@ public class Wallet : MonoBehaviour
         if (amount <= 0)
             return;
 
-        _exp -= amount;
-        ExpChanged?.Invoke(_exp);
+        _experience -= amount;
+        ExperienceChanged?.Invoke(_experience);
     }
 
     public void RemoveMoney(int amount)

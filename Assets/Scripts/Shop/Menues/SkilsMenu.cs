@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SkilsMenu : Menu
 {
+    private const string Key = "Skills";
+
     [SerializeField] private SkilsMenuView _buttons;
     [SerializeField] private UpgradeData _upgradeData;
     [SerializeField] private Wallet _wallet;
@@ -11,6 +12,9 @@ public class SkilsMenu : Menu
     private List<SkillView> _skillViews = new List<SkillView>();
 
     private SkillView _currentSkilView;
+    private IStorageService _storageService;
+
+    private List<bool> _skillViewsBuying = new();
 
     private void Awake()
     {
@@ -18,6 +22,11 @@ public class SkilsMenu : Menu
 
         foreach (SkillView skillView in _skillViews)
             skillView.Click += OnClick;
+
+        _storageService = new JsonToFileStorageService();
+
+        if (_storageService.Exists(Key) == true)
+            _storageService.Load<List<bool>>(Key, LoadSkill);
     }
 
     private void OnClick(SkillView skillView)
@@ -28,6 +37,25 @@ public class SkilsMenu : Menu
             ButtonMenu.interactable = false;
         else
             ButtonMenu.interactable = true;
+    }
+
+    private void Save()
+    {
+        _skillViewsBuying.Clear();
+
+        foreach (SkillView skillView in _skillViews)
+            _skillViewsBuying.Add(skillView.IsBuying);
+
+        _storageService.Save(Key, _skillViewsBuying);
+    }
+
+    private void LoadSkill(List<bool> listBools)
+    {
+        for (int i = 0; i < listBools.Count; i++)
+        {
+            if (listBools[i] == true)
+                _skillViews[i].Buy();
+        }
     }
 
     protected override void MakeAction()
@@ -59,6 +87,8 @@ public class SkilsMenu : Menu
 
         _currentSkilView.Buy();
         OffButton();
+        Save();
+        BuySound.PlayBuySound();
     }
 
     private void OffButton()

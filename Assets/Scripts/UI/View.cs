@@ -11,7 +11,7 @@ public abstract class View<T> : MonoBehaviour, IView where T : View<T>
 
     private Button _button;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _button = GetComponent<Button>();
     }

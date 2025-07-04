@@ -16,12 +16,12 @@ public class ExpView : MonoBehaviour
 
     private void OnEnable()
     {
-        _wallet.ExpChanged += OnExpChanged;
+        _wallet.ExperienceChanged += OnExpChanged;
     }
 
     private void OnDisable()
     {
-        _wallet.ExpChanged -= OnExpChanged;
+        _wallet.ExperienceChanged -= OnExpChanged;
     }
 
     private void OnExpChanged(int amount)

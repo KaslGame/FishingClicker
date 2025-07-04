@@ -10,6 +10,7 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private UpgradeData _upgradeData;
 
     public event Action<Fish> FishSelected;
+    public event Action FishCatched;
     public event Action<int, int> Click;
 
     private Fish _currentFish;
@@ -73,6 +74,7 @@ public class FishingRod : MonoBehaviour
             _inventory.AddFish(_currentFish);
             _fishing = false;
             _countClicks = 0;
+            FishCatched?.Invoke();
         }
     }
 }

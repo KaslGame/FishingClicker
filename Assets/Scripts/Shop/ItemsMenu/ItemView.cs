@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ItemView : View<ItemView>
 {
+    private const string Item = nameof(Item);
+
     [SerializeField] private UpgradeData _fishList;
     [SerializeField] FishingNet _fishingNet;
     [SerializeField] private ItemType _itemType;
@@ -18,6 +20,36 @@ public class ItemView : View<ItemView>
 
     private int _fishAmount;
     private int _maxFishAmount = 5;
+
+
+    private IStorageService _storageService;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _storageService = new JsonToFileStorageService();
+
+        if (_storageService.Exists(Item+_itemType) == true)
+            _storageService.Load<ItemData>(Item + _itemType, LoadItem);
+    }
+
+    private void LoadItem(ItemData itemData)
+    {
+        _level = itemData.Level;
+        IsBuying = itemData.IsBuying;
+        _cost = itemData.Cost;
+    }
+
+    private void Save()
+    {
+        var itemData = new ItemData();
+        itemData.Level = _level;
+        itemData.IsBuying = IsBuying;
+        itemData.Cost = _cost;
+
+        _storageService.Save(Item + _itemType, itemData);
+    }
 
     public void Buy()
     {
@@ -39,6 +71,7 @@ public class ItemView : View<ItemView>
         }
 
         _level++;
+        Save();
     }
 
     public bool CheckIsBuying()
